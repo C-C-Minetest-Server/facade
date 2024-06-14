@@ -34,7 +34,6 @@ local function get_dig_groups(recipeitem)
 	for _, key in ipairs(node_dig_groups) do
 		return_groups[key] = item.groups[key]
 	end
-	print(recipeitem, dump(return_groups))
 
 	return return_groups
 end
