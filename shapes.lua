@@ -2,6 +2,48 @@
 
 local wehavechisels =  minetest.get_modpath("mychisel")
 
+local node_dig_groups = {
+    -- General groups
+    "not_in_creative_inventory",
+
+    -- Minetest Game dig groups
+    "crumbly", "cracky", "snappy", "choppy", "fleshy", "explody", "oddly_breakable_by_hand", "dig_immediate",
+
+    -- -- MineClone2 dig groups
+    -- "pickaxey", "axey", "shovely", "swordly", "shearsy", "handy", "creative_breakable",
+
+    -- -- MineClone2 interaction groups
+    -- "flammable", "fire_encouragement", "fire_flammability",
+}
+local function get_dig_groups(recipeitem)
+	local item = minetest.registered_items[recipeitem]
+
+	-- If item not found or is not node, return default
+	if not item or item.type ~= "node" then
+		-- Removing stone = 1: This is a craft group!
+		return {cracky = 3, oddly_breakable_by_hand = 2}
+	end
+
+	-- This node don't want to be dug
+	if not item.groups then
+		return {}
+	end
+
+	-- Preserve known dig groups
+	local return_groups = {}
+	for _, key in ipairs(node_dig_groups) do
+		return_groups[key] = item.groups[key]
+	end
+	print(recipeitem, dump(return_groups))
+
+	return return_groups
+end
+
+local function get_node_sound(recipeitem)
+	local item = minetest.registered_items[recipeitem]
+	return item and item.sounds or default.node_sound_stone_defaults()
+end
+
 --------------
 --Bannerstones
 --------------
@@ -21,8 +63,8 @@ function facade.register_bannerstone(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -55,8 +97,8 @@ function facade.register_bannerstone_corner(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -86,8 +128,8 @@ function facade.register_centerstone(modname, subname, recipeitem, desc)
 		tiles = {"" .. modname.. "_" .. subname .. ".png^facade_centerstone.png"},
 		paramtype = "light",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -147,8 +189,8 @@ function facade.register_column(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -186,8 +228,8 @@ function facade.register_column_corner(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -224,8 +266,8 @@ function facade.register_corbel(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -252,8 +294,8 @@ function facade.register_corbel_corner(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -280,8 +322,8 @@ function facade.register_corbel_corner_inner(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -320,8 +362,8 @@ function facade.register_carved_stone_a(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -362,8 +404,8 @@ function facade.register_carved_stone_a_corner(modname, subname, recipeitem, des
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -417,8 +459,8 @@ function facade.register_rgspro(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -451,8 +493,8 @@ function facade.register_rgspro_inner_corner(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -489,8 +531,8 @@ function facade.register_rgspro_outer_corner(modname, subname, recipeitem, desc)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = false,
-		groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-		sounds = default.node_sound_stone_defaults(),
+		groups = get_dig_groups(recipeitem),
+		sounds = get_node_sound(recipeitem),
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -528,8 +570,8 @@ function facade.register_corner_bricks(modname, subname, recipeitem, desc)
 			paramtype = "light",
 			paramtype2 = "facedir",
 			is_ground_content = false,
-			groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-			sounds = default.node_sound_stone_defaults(),
+			groups = get_dig_groups(recipeitem),
+			sounds = get_node_sound(recipeitem),
 			node_box = {
 				type = "fixed",
 				fixed = {
@@ -594,8 +636,8 @@ if not minetest.get_modpath("columnia") then
 			paramtype = "light",
 			paramtype2 = "facedir",
 			is_ground_content = false,
-			groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-			sounds = default.node_sound_stone_defaults(),
+			groups = get_dig_groups(recipeitem),
+			sounds = get_node_sound(recipeitem),
 			on_place = minetest.rotate_node,
 			node_box = {
 				type = "fixed",
@@ -618,8 +660,8 @@ if not minetest.get_modpath("columnia") then
 			paramtype = "light",
 			paramtype2 = "facedir",
 			is_ground_content = false,
-			groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-			sounds = default.node_sound_stone_defaults(),
+			groups = get_dig_groups(recipeitem),
+			sounds = get_node_sound(recipeitem),
 			on_place = minetest.rotate_node,
 			node_box = {
 				type = "fixed",
@@ -650,8 +692,8 @@ if not minetest.get_modpath("columnia") then
 				paramtype = "light",
 				paramtype2 = "facedir",
 				is_ground_content = false,
-				groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-				sounds = default.node_sound_stone_defaults(),
+				groups = get_dig_groups(recipeitem),
+				sounds = get_node_sound(recipeitem),
 				on_place = minetest.rotate_node,
 				node_box = {
 					type = "fixed",
@@ -675,8 +717,8 @@ if not minetest.get_modpath("columnia") then
 			paramtype = "light",
 			paramtype2 = "facedir",
 			is_ground_content = false,
-			groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-			sounds = default.node_sound_stone_defaults(),
+			groups = get_dig_groups(recipeitem),
+			sounds = get_node_sound(recipeitem),
 			on_place = columnia_rotate,
 			node_box = {
 				type = "fixed",
@@ -699,8 +741,8 @@ if not minetest.get_modpath("columnia") then
 			paramtype = "light",
 			paramtype2 = "facedir",
 			is_ground_content = false,
-			groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-			sounds = default.node_sound_stone_defaults(),
+			groups = get_dig_groups(recipeitem),
+			sounds = get_node_sound(recipeitem),
 			on_place = columnia_rotate,
 			node_box = {
 				type = "fixed",
@@ -720,8 +762,8 @@ if not minetest.get_modpath("columnia") then
 			paramtype = "light",
 			paramtype2 = "facedir",
 			is_ground_content = false,
-			groups = {cracky = 3, oddly_breakable_by_hand = 2, stone = 1},
-			sounds = default.node_sound_stone_defaults(),
+			groups = get_dig_groups(recipeitem),
+			sounds = get_node_sound(recipeitem),
 			on_place = columnia_rotate,
 			node_box = {
 				type = "fixed",
